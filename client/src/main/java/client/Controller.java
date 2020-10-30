@@ -53,6 +53,8 @@ public class Controller implements Initializable {
     private boolean authenticated;
     private String nickname;
 
+    private String login;
+
     private void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
         authPanel.setVisible(!authenticated);
@@ -65,6 +67,7 @@ public class Controller implements Initializable {
         if (!authenticated) {
             nickname = "";
             setTitle("Балабол");
+            History.stop();
         } else {
             setTitle(String.format("[ %s ] - Балабол", nickname));
         }
@@ -107,6 +110,10 @@ public class Controller implements Initializable {
                         if (str.startsWith("/authok ")) {
                             nickname = str.split("\\s")[1];
                             setAuthenticated(true);
+
+                            textArea.appendText(History.getLastMessages(login));
+                            History.start(login);
+
                             break;
                         }
 
@@ -150,6 +157,7 @@ public class Controller implements Initializable {
                             //==============//
                         } else {
                             textArea.appendText(str + "\n");
+                            History.writeMessage(str);
                         }
                     }
                 } catch (RuntimeException e) {
@@ -193,6 +201,7 @@ public class Controller implements Initializable {
 
         String msg = String.format("/auth %s %s",
                 loginField.getText().trim(), passwordField.getText().trim());
+        login = loginField.getText().trim();
         try {
             out.writeUTF(msg);
             passwordField.clear();

@@ -60,7 +60,7 @@ public class ClientHandler {
                                     server.subscribe(this);
                                     socket.setSoTimeout(0);
                                     //==============//
-                                    sendMsg(SQLHandler.getMessageForNick(nickname));
+//                                    sendMsg(SQLHandler.getMessageForNick(nickname));
                                     //==============//
                                     break;
                                 } else {
